@@ -1,6 +1,7 @@
 
 import java.sql.DriverManager;
 import java.sql.Connection;
+import javax.swing.table.DefaultTableModel;
 
 
 
@@ -32,6 +33,13 @@ public class DASHBOARD extends javax.swing.JFrame {
     public DASHBOARD() {
         initComponents();
         Connection();
+        
+          DefaultTableModel model = new DefaultTableModel(
+            new String[]{"Task", "Deadline", "Priority", "Animal"}, 0
+        );
+        myTable.setModel(model);
+
+      
     }
     
    
@@ -56,7 +64,7 @@ public class DASHBOARD extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        myTable = new javax.swing.JTable();
         Task = new javax.swing.JTextField();
         Deadline = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
@@ -138,7 +146,7 @@ public class DASHBOARD extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        myTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -164,7 +172,7 @@ public class DASHBOARD extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(myTable);
 
         Task.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -415,6 +423,6 @@ public class DASHBOARD extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable myTable;
     // End of variables declaration//GEN-END:variables
 }
