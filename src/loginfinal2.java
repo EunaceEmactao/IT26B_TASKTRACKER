@@ -4,12 +4,6 @@
  */
 
 
-import Finals.DASHBOARD;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import javax.swing.JOptionPane;
-
 
 public class loginfinal2 extends javax.swing.JFrame {
 
@@ -191,71 +185,13 @@ public class loginfinal2 extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        CreateAccount createacc = new CreateAccount();
-        createacc.setVisible(true);
-        dispose();
+      
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
 
-        String user = username.getText();
-        String pass = password.getText();
-        int key = 3;
-        CreateAccount.currentUSer = user;
-        
-        if (user.isEmpty() || pass.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Invalid: Please enter both username and password.");
-        } else {
-            String filePath = "C:\\Users\\Eunace Faith Emactao\\OneDrive\\Documents\\assignments\\GUI txt\\eun2.txt";
-
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(filePath));
-                String line;
-                boolean matched = false;
-
-                while ((line = reader.readLine()) != null) {
-                    // Trim to remove unnecessary whitespace
-                    line = line.trim();
-
-                    // Only process lines that have the expected format
-                    if (line.startsWith("Username:") && line.contains(", Password:")) {
-                        String[] parts = line.split(","); // Split into ["Username:john", " Password:1234"]
-
-                        if (parts.length == 2) {
-                            String storedUsername = parts[0].split(":", 2)[1].trim(); // Get "john"
-                            String encryptedPassword = parts[1].split(":", 2)[1].trim();
-                            String decryptedPassword = passwordDecryption(encryptedPassword, key);
-
-                            if (user.equals(storedUsername) && pass.equals(decryptedPassword)) {
-                                matched = true;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                reader.close();
-
-                if (matched) {
-                    DASHBOARD dashboard = new DASHBOARD();
-                    dashboard.setVisible(true);
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Invalid credentials", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error reading credentials file:\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+   
     }//GEN-LAST:event_loginActionPerformed
-
-    public static String passwordDecryption(String encryptedPassword, int key) {
-        char[] chars = encryptedPassword.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            chars[i] -= key;
-        }
-        return new String(chars);
-    }
 
     /**
      * @param args the command line arguments
