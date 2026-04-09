@@ -1,5 +1,7 @@
 
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 
 
@@ -197,7 +199,34 @@ public class CreateAccount extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
-      
+      DASHBOARD dash = new DASHBOARD();
+        
+        
+        Connection conn = connectionDB_Eun.getConnection();
+
+try {
+    String sql = "INSERT INTO accounts (username, password) VALUES (?, ?)";
+    PreparedStatement pst = conn.prepareStatement(sql);
+
+    String user = username.getText();
+    String pass = new String(password.getPassword());
+
+    pst.setString(1, user);
+    pst.setString(2, pass);
+
+    int rowsInserted = pst.executeUpdate();
+
+    if (rowsInserted > 0) {
+          dash.setVisible(true);
+             dispose();
+        JOptionPane.showMessageDialog(null, "Account Created Successfully!");
+    } else {
+        JOptionPane.showMessageDialog(null, "Failed to create account.");
+    }
+
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+}  
   
 
     }//GEN-LAST:event_LoginActionPerformed
