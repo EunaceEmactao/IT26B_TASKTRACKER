@@ -61,7 +61,7 @@ public class DASHBOARD extends javax.swing.JFrame {
         jMenu5 = new javax.swing.JMenu();
         jPanel2 = new javax.swing.JPanel();
         CreateTask = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        Delete = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         viewTask = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -113,13 +113,13 @@ public class DASHBOARD extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(0, 0, 0));
-        jButton5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("Delete");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        Delete.setBackground(new java.awt.Color(0, 0, 0));
+        Delete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Delete.setForeground(new java.awt.Color(255, 255, 255));
+        Delete.setText("Delete");
+        Delete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                DeleteActionPerformed(evt);
             }
         });
 
@@ -282,7 +282,7 @@ public class DASHBOARD extends javax.swing.JFrame {
                                 .addComponent(jLabel5)
                                 .addGap(238, 238, 238)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Delete, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(viewTask, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(CreateTask, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -317,7 +317,7 @@ public class DASHBOARD extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(PRIORITY, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(Delete, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -372,9 +372,25 @@ public class DASHBOARD extends javax.swing.JFrame {
         DEADLINE.setText("");
     }//GEN-LAST:event_CreateTaskActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
+      DefaultTableModel model = (DefaultTableModel) myTable.getModel();
+int selectedRow = myTable.getSelectedRow();
+
+if (selectedRow != -1) {
+    int confirm = JOptionPane.showConfirmDialog(
+        this,
+        "Are you sure you want to delete this row?",
+        "Confirm Delete",
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirm == JOptionPane.YES_OPTION) {
+        model.removeRow(selectedRow);
+    }
+} else {
+    JOptionPane.showMessageDialog(this, "Please select a row to delete.");
+}
+    }//GEN-LAST:event_DeleteActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
@@ -401,7 +417,6 @@ public class DASHBOARD extends javax.swing.JFrame {
                   "Task Details",
     JOptionPane.INFORMATION_MESSAGE,
     icon
-                
                 
         );
     }
@@ -464,9 +479,9 @@ public class DASHBOARD extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> ANIMAL;
     private javax.swing.JButton CreateTask;
     private javax.swing.JTextField DEADLINE;
+    private javax.swing.JButton Delete;
     private javax.swing.JComboBox<String> PRIORITY;
     private javax.swing.JTextField TASK;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel10;
