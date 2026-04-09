@@ -1,6 +1,7 @@
 
 import java.sql.DriverManager;
 import java.sql.Connection;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -58,16 +59,16 @@ public class DASHBOARD extends javax.swing.JFrame {
         jMenu4 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        CreateTask = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        viewTask = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         myTable = new javax.swing.JTable();
-        Task = new javax.swing.JTextField();
-        Deadline = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        CategoryBox = new javax.swing.JComboBox<>();
+        TASK = new javax.swing.JTextField();
+        DEADLINE = new javax.swing.JTextField();
+        PRIORITY = new javax.swing.JComboBox<>();
+        ANIMAL = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -101,13 +102,13 @@ public class DASHBOARD extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 164, 200));
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 0));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Create Task");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        CreateTask.setBackground(new java.awt.Color(0, 0, 0));
+        CreateTask.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        CreateTask.setForeground(new java.awt.Color(255, 255, 255));
+        CreateTask.setText("Create Task");
+        CreateTask.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                CreateTaskActionPerformed(evt);
             }
         });
 
@@ -131,13 +132,13 @@ public class DASHBOARD extends javax.swing.JFrame {
             }
         });
 
-        jButton7.setBackground(new java.awt.Color(0, 0, 0));
-        jButton7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton7.setForeground(new java.awt.Color(255, 255, 255));
-        jButton7.setText("View Task");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        viewTask.setBackground(new java.awt.Color(0, 0, 0));
+        viewTask.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        viewTask.setForeground(new java.awt.Color(255, 255, 255));
+        viewTask.setText("View Task");
+        viewTask.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                viewTaskActionPerformed(evt);
             }
         });
 
@@ -171,39 +172,39 @@ public class DASHBOARD extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(myTable);
 
-        Task.setBackground(new java.awt.Color(255, 255, 255));
-        Task.setForeground(new java.awt.Color(0, 0, 0));
-        Task.addActionListener(new java.awt.event.ActionListener() {
+        TASK.setBackground(new java.awt.Color(255, 255, 255));
+        TASK.setForeground(new java.awt.Color(0, 0, 0));
+        TASK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TaskActionPerformed(evt);
+                TASKActionPerformed(evt);
             }
         });
 
-        Deadline.setBackground(new java.awt.Color(255, 255, 255));
-        Deadline.setForeground(new java.awt.Color(0, 0, 0));
-        Deadline.addActionListener(new java.awt.event.ActionListener() {
+        DEADLINE.setBackground(new java.awt.Color(255, 255, 255));
+        DEADLINE.setForeground(new java.awt.Color(0, 0, 0));
+        DEADLINE.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DeadlineActionPerformed(evt);
+                DEADLINEActionPerformed(evt);
             }
         });
 
-        jComboBox1.setBackground(new java.awt.Color(255, 255, 255));
-        jComboBox1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jComboBox1.setForeground(new java.awt.Color(0, 0, 0));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "High", "Medium", "Low" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        PRIORITY.setBackground(new java.awt.Color(255, 255, 255));
+        PRIORITY.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        PRIORITY.setForeground(new java.awt.Color(0, 0, 0));
+        PRIORITY.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "High", "Medium", "Low" }));
+        PRIORITY.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                PRIORITYActionPerformed(evt);
             }
         });
 
-        CategoryBox.setBackground(new java.awt.Color(255, 255, 255));
-        CategoryBox.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        CategoryBox.setForeground(new java.awt.Color(0, 0, 0));
-        CategoryBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dog", "Cat", "Bird", "Hamster" }));
-        CategoryBox.addActionListener(new java.awt.event.ActionListener() {
+        ANIMAL.setBackground(new java.awt.Color(255, 255, 255));
+        ANIMAL.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        ANIMAL.setForeground(new java.awt.Color(0, 0, 0));
+        ANIMAL.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dog", "Cat", "Bird", "Hamster" }));
+        ANIMAL.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CategoryBoxActionPerformed(evt);
+                ANIMALActionPerformed(evt);
             }
         });
 
@@ -268,10 +269,10 @@ public class DASHBOARD extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(Deadline, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(Task, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(CategoryBox, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(DEADLINE, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(TASK, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(PRIORITY, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(ANIMAL, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGap(48, 48, 48))
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                     .addComponent(jLabel6)
@@ -281,9 +282,9 @@ public class DASHBOARD extends javax.swing.JFrame {
                                 .addGap(238, 238, 238)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(viewTask, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(CreateTask, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 817, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(56, 56, 56))
@@ -300,21 +301,21 @@ public class DASHBOARD extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(CreateTask, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(34, 34, 34))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(Task, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(TASK, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(Deadline, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(viewTask, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(DEADLINE, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(8, 8, 8)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(PRIORITY, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -322,7 +323,7 @@ public class DASHBOARD extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(CategoryBox, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(ANIMAL, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(99, 99, 99))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -346,9 +347,29 @@ public class DASHBOARD extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void CreateTaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateTaskActionPerformed
+        String task = TASK.getText().trim();
+        String deadline = DEADLINE.getText().trim();
+        String priority = PRIORITY.getSelectedItem().toString();
+        String animal = ANIMAL.getSelectedItem().toString();
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+        if (task.isEmpty() || deadline.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+            return;
+
+        }
+
+        DefaultTableModel model = (DefaultTableModel) myTable.getModel();
+        model.addRow(new Object[]{
+            task,
+            deadline,
+            priority,
+            animal
+        });
+
+        TASK.setText("");
+        DEADLINE.setText("");
+    }//GEN-LAST:event_CreateTaskActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
@@ -358,26 +379,26 @@ public class DASHBOARD extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void viewTaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewTaskActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_viewTaskActionPerformed
 
-    private void DeadlineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeadlineActionPerformed
+    private void DEADLINEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DEADLINEActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_DeadlineActionPerformed
+    }//GEN-LAST:event_DEADLINEActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void PRIORITYActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PRIORITYActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_PRIORITYActionPerformed
 
-    private void CategoryBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CategoryBoxActionPerformed
+    private void ANIMALActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ANIMALActionPerformed
 
         String username;// TODO add your handling code here:
-    }//GEN-LAST:event_CategoryBoxActionPerformed
+    }//GEN-LAST:event_ANIMALActionPerformed
 
-    private void TaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TaskActionPerformed
+    private void TASKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TASKActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TaskActionPerformed
+    }//GEN-LAST:event_TASKActionPerformed
 
   
     public static void main(String args[]) {
@@ -416,15 +437,14 @@ public class DASHBOARD extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> CategoryBox;
-    private javax.swing.JTextField Deadline;
-    private javax.swing.JTextField Task;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> ANIMAL;
+    private javax.swing.JButton CreateTask;
+    private javax.swing.JTextField DEADLINE;
+    private javax.swing.JComboBox<String> PRIORITY;
+    private javax.swing.JTextField TASK;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -443,5 +463,6 @@ public class DASHBOARD extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable myTable;
+    private javax.swing.JButton viewTask;
     // End of variables declaration//GEN-END:variables
 }
