@@ -1,49 +1,11 @@
 
-import java.sql.DriverManager;
-import java.sql.Connection;
+
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-
-
-
 public class DASHBOARD extends javax.swing.JFrame {
 
-    Connection con;
-  
-    public void Connection() {
- 
-    try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        con = DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/purrfectplanner",
-            "root",
-            ""
-        );
-
-        System.out.println(" Connected to MySQL successfully");
-
-    } catch (Exception e) {
-        System.out.println(" Connection failed!");
-        e.printStackTrace(); 
-    
-    }
-}
-    
-     
-    public DASHBOARD() {
-        initComponents();
-        Connection();
-        
-          DefaultTableModel model = new DefaultTableModel(
-            new String[]{"Task", "Deadline", "Priority", "Animal"}, 0
-        );
-        myTable.setModel(model);
-
-      
-    }
-    
    
 
     @SuppressWarnings("unchecked")
@@ -373,23 +335,23 @@ public class DASHBOARD extends javax.swing.JFrame {
     }//GEN-LAST:event_CreateTaskActionPerformed
 
     private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
-      DefaultTableModel model = (DefaultTableModel) myTable.getModel();
-int selectedRow = myTable.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel) myTable.getModel();
+        int selectedRow = myTable.getSelectedRow();
 
-if (selectedRow != -1) {
-    int confirm = JOptionPane.showConfirmDialog(
-        this,
-        "Are you sure you want to delete this row?",
-        "Confirm Delete",
-        JOptionPane.YES_NO_OPTION
-    );
+        if (selectedRow != -1) {
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to delete this row?",
+                    "Confirm Delete",
+                    JOptionPane.YES_NO_OPTION
+            );
 
-    if (confirm == JOptionPane.YES_OPTION) {
-        model.removeRow(selectedRow);
-    }
-} else {
-    JOptionPane.showMessageDialog(this, "Please select a row to delete.");
-}
+            if (confirm == JOptionPane.YES_OPTION) {
+                model.removeRow(selectedRow);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a row to delete.");
+        }
     }//GEN-LAST:event_DeleteActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -397,29 +359,28 @@ if (selectedRow != -1) {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void viewTaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewTaskActionPerformed
-         int row = myTable.getSelectedRow();
+        int row = myTable.getSelectedRow();
 
-    if (row != -1) {
-        DefaultTableModel model = (DefaultTableModel) myTable.getModel();
+        if (row != -1) {
+            DefaultTableModel model = (DefaultTableModel) myTable.getModel();
 
-        String task = model.getValueAt(row, 0).toString();
-        String deadline = model.getValueAt(row, 1).toString();
-        String priority = model.getValueAt(row, 2).toString();
-        String animal = model.getValueAt(row, 3).toString();
+            String task = model.getValueAt(row, 0).toString();
+            String deadline = model.getValueAt(row, 1).toString();
+            String priority = model.getValueAt(row, 2).toString();
+            String animal = model.getValueAt(row, 3).toString();
 
-        ImageIcon icon = new ImageIcon("C:\\Users\\Eunace Faith Emactao\\Downloads\\writing (1) (1).png");
-        
-        JOptionPane.showMessageDialog(this,
-                "Task: " + task +
-                "\nDeadline: " + deadline +
-                "\nPriority: " + priority +
-                "\nAnimal: " + animal,
-                  "Task Details",
-    JOptionPane.INFORMATION_MESSAGE,
-    icon
-                
-        );
-    }
+            ImageIcon icon = new ImageIcon("C:\\Users\\Eunace Faith Emactao\\Downloads\\writing (1) (1).png");
+
+            JOptionPane.showMessageDialog(this,
+                    "Task: " + task
+                    + "\nDeadline: " + deadline
+                    + "\nPriority: " + priority
+                    + "\nAnimal: " + animal,
+                    "Task Details",
+                    JOptionPane.INFORMATION_MESSAGE,
+                    icon
+            );
+        }
     }//GEN-LAST:event_viewTaskActionPerformed
 
     private void DEADLINEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DEADLINEActionPerformed
@@ -439,7 +400,6 @@ if (selectedRow != -1) {
         // TODO add your handling code here:
     }//GEN-LAST:event_TASKActionPerformed
 
-  
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -472,7 +432,6 @@ if (selectedRow != -1) {
             }
         });
     }
-    
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

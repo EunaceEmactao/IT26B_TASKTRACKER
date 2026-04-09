@@ -1,3 +1,8 @@
+
+import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -204,8 +209,45 @@ public class loginfinal2 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
-
+ DASHBOARD dash = new DASHBOARD();
    
+
+
+Connection conn = connectionDB_Eun.getConnection();
+
+try {
+    String sql = "SELECT * FROM account WHERE username=? AND password=?";
+    PreparedStatement pst = conn.prepareStatement(sql);
+
+    String user = username.getText();
+    String pass = new String(password.getPassword());
+
+    pst.setString(1, user);
+    pst.setString(2, pass);
+
+    ResultSet rs = pst.executeQuery();
+
+    if (rs.next()) {
+        int confirm = JOptionPane.showConfirmDialog(
+                null,
+                "Are you sure you want to login?"
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+           dash.setVisible(true);
+            dispose();
+        }
+
+    } else {
+        JOptionPane.showMessageDialog(null, "Incorrect Credentials");
+    }
+
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+}
+
+
+
     }//GEN-LAST:event_loginActionPerformed
 
     /**
