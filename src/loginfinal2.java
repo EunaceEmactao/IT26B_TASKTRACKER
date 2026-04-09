@@ -227,6 +227,8 @@ try {
 
     ResultSet rs = pst.executeQuery();
           if (rs.next()) {
+              dash.setVisible(true);
+              dispose();
 } else {
     JOptionPane.showMessageDialog(null, "Incorrect Credentials");
 }
