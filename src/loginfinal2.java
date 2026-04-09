@@ -226,22 +226,10 @@ try {
     pst.setString(2, pass);
 
     ResultSet rs = pst.executeQuery();
-
-    if (rs.next()) {
-        int confirm = JOptionPane.showConfirmDialog(
-                null,
-                "Are you sure you want to login?"
-        );
-
-        if (confirm == JOptionPane.YES_OPTION) {
-           dash.setVisible(true);
-            dispose();
-        }
-
-    } else {
-        JOptionPane.showMessageDialog(null, "Incorrect Credentials");
-    }
-
+          if (rs.next()) {
+} else {
+    JOptionPane.showMessageDialog(null, "Incorrect Credentials");
+}
 } catch (Exception e) {
     JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
 }
