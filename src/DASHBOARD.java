@@ -1,6 +1,7 @@
 
 import java.sql.DriverManager;
 import java.sql.Connection;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -380,7 +381,30 @@ public class DASHBOARD extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void viewTaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewTaskActionPerformed
-        // TODO add your handling code here:
+         int row = myTable.getSelectedRow();
+
+    if (row != -1) {
+        DefaultTableModel model = (DefaultTableModel) myTable.getModel();
+
+        String task = model.getValueAt(row, 0).toString();
+        String deadline = model.getValueAt(row, 1).toString();
+        String priority = model.getValueAt(row, 2).toString();
+        String animal = model.getValueAt(row, 3).toString();
+
+        ImageIcon icon = new ImageIcon("C:\\Users\\Eunace Faith Emactao\\Downloads\\writing (1) (1).png");
+        
+        JOptionPane.showMessageDialog(this,
+                "Task: " + task +
+                "\nDeadline: " + deadline +
+                "\nPriority: " + priority +
+                "\nAnimal: " + animal,
+                  "Task Details",
+    JOptionPane.INFORMATION_MESSAGE,
+    icon
+                
+                
+        );
+    }
     }//GEN-LAST:event_viewTaskActionPerformed
 
     private void DEADLINEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DEADLINEActionPerformed
