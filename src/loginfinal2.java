@@ -1,4 +1,5 @@
 
+import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -212,49 +213,39 @@ public class loginfinal2 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
+ Connection conn = connectionDB_Eun.getConnection();
+
+try {
+    String sql = "SELECT * FROM account WHERE username =? AND password=?";
+    PreparedStatement pst = conn.prepareStatement(sql);
+
+    String user = username.getText();
+    String pass = new String(password.getPassword());
+
+    pst.setString(1, user);
+    pst.setString(2, pass);
+
+    ResultSet rs = pst.executeQuery();
+
+    if (rs.next()) {
+
+    
+        Session.userid = rs.getInt("accountID");   
+        Session.username = rs.getString("username");
 
 
-    String user = username.getText().trim();
-    String pass = new String(password.getPassword()).trim();
+    
+        DASHBOARD dash = new DASHBOARD();
+        dash.setVisible(true);
+        this.dispose();
 
-    if (user.isEmpty() || pass.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please enter username and password.");
-        return;
+    } else {
+        JOptionPane.showMessageDialog(null, "Incorrect Credentials");
     }
 
-    try {
-        Connection conn = connectionDB_Eun.getConnection();
-
-        String sql = "SELECT userID FROM account WHERE username=? AND password=?";
-        PreparedStatement pst = conn.prepareStatement(sql);
-
-        pst.setString(1, user);
-        pst.setString(2, pass);
-
-        ResultSet rs = pst.executeQuery();
-
-        if (rs.next()) {    
-
-            
-            Session.userid = rs.getInt("userID");
-
-            JOptionPane.showMessageDialog(this, "Login successful!");
-
-            new DASHBOARD().setVisible(true);
-            this.dispose();
-
-        } else {
-            JOptionPane.showMessageDialog(this, "Incorrect username or password.");
-        }
-
-        rs.close();
-        pst.close();
-        conn.close();
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-    }
-
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+}
 
 
 

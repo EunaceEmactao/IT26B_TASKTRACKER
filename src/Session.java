@@ -8,6 +8,6 @@
  * @author Eunace Faith Emactao
  */
 public class Session {
-    public static int userid;
+    public static int userid  ;
     public static String username;
 }

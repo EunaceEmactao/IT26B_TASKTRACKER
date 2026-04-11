@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
-
+import java.sql.Statement;
 public class CreateAccount extends javax.swing.JFrame {
 
 
@@ -199,61 +199,69 @@ public class CreateAccount extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
-       try {
-            Connection conn = connectionDB_Eun.getConnection();
+   Connection conn = connectionDB_Eun.getConnection();
 
-            String user = username.getText().trim();
-            String pass = new String(password.getPassword()).trim();
+try {
+    String sql = "INSERT INTO account (username, password) VALUES (?, ?)";
+    PreparedStatement pst = conn.prepareStatement(sql);
 
-         
-            if (user.isEmpty() || pass.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please fill all fields!");
-                return;
-            }
+    String user = username.getText().trim();
+    String pass = new String(password.getPassword()).trim();
+
+    if (user.isEmpty() || pass.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Please fill all fields!");
+        return;
+    }
+String checkSql = "SELECT * FROM account WHERE username = ?";
+    PreparedStatement checkPst = conn.prepareStatement(checkSql);
+    checkPst.setString(1, user);
+
+    ResultSet checkRs = checkPst.executeQuery();
+
+    if (checkRs.next()) {
+        JOptionPane.showMessageDialog(null, "Username already exists!");
+        return;
+    
+    }
+    
+    pst.setString(1, user);
+    pst.setString(2, pass);
+
+    int rowsInserted = pst.executeUpdate();
+
+    if (rowsInserted > 0) {
 
       
-            String checkSql = "SELECT * FROM account WHERE username = ?";
-            PreparedStatement checkPst = conn.prepareStatement(checkSql);
-            checkPst.setString(1, user);
+        String getUserSql = "SELECT accountID FROM account WHERE username=? AND password=?";
+        PreparedStatement pst2 = conn.prepareStatement(getUserSql);
+        pst2.setString(1, user);
+        pst2.setString(2, pass);
 
-            ResultSet checkRs = checkPst.executeQuery();
+        ResultSet rs = pst2.executeQuery();
 
-            if (checkRs.next()) {
-                JOptionPane.showMessageDialog(this, "Username already exists!");
-                return;
-            }
+        int newUserId = -1;
 
-        
-            String sql = "INSERT INTO account (username, password) VALUES (?, ?)";
-            PreparedStatement pst = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-
-            pst.setString(1, user);
-            pst.setString(2, pass);
-
-            int rowsInserted = pst.executeUpdate();
-
-            if (rowsInserted > 0) {
-
-              
-                ResultSet rs = pst.getGeneratedKeys();
-                if (rs.next()) {
-                    Session.userid = rs.getInt("userID");
-                }
-
-                JOptionPane.showMessageDialog(this, "Account Created Successfully!");
-
-        
-                new DASHBOARD().setVisible(true);
-                dispose();
-
-            } else {
-                JOptionPane.showMessageDialog(this, "Failed to create account.");
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        if (rs.next()) {
+            newUserId = rs.getInt("accountID");
         }
-  
+
+      
+        Session.userid = newUserId;
+        Session.username = user;
+
+        JOptionPane.showMessageDialog(null, "Account Created Successfully!");
+
+        DASHBOARD dash = new DASHBOARD();
+        dash.setVisible(true);
+        dispose();
+
+    } else {
+        JOptionPane.showMessageDialog(null, "Failed to create account.");
+    }
+
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+}
 
     }//GEN-LAST:event_LoginActionPerformed
 

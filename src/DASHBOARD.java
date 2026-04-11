@@ -10,45 +10,42 @@ import java.sql.Statement;
 
 
 public class DASHBOARD extends javax.swing.JFrame {
-    private void loadTasks() {
-    try {
-        Connection conn = connectionDB_Eun.getConnection();
 
-        String sql = "SELECT * FROM my_task WHERE userId = ?";
-        PreparedStatement pst = conn.prepareStatement(sql);
-        pst.setInt(1, Session.userid);
 
-        ResultSet rs = pst.executeQuery();
-
+  public DASHBOARD(){
+ initComponents();
+    loadTasks();
+}
+     private void loadTasks() {
         DefaultTableModel model = (DefaultTableModel) myTable.getModel();
         model.setRowCount(0);
 
-        while (rs.next()) {
-            model.addRow(new Object[]{
-                rs.getInt("TaskID"),
-                rs.getString("taskName"),
-                rs.getString("taskDeadline"),
-                rs.getString("priority"),
-                rs.getString("taskAnimal"),
-                rs.getString("Status")
-            });
-        }
+        String sql = "SELECT TaskID, taskName, taskDeadline, priority, taskAnimal, Status " +
+                     "FROM my_task WHERE userId = ? ORDER BY TaskID DESC";
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-    }
-}
+        try (Connection conn = connectionDB_Eun.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
+
+            pst.setInt(1, Session.userid);
+
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                        rs.getInt("TaskID"),
+                        rs.getString("taskName"),
+                        rs.getString("taskDeadline"),
+                        rs.getString("priority"),
+                        rs.getString("taskAnimal"),
+                        rs.getString("Status")
+                });
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Load Error: " + e.getMessage());
+      
+        }
     
-    
-    
-    
-    
-    
-    
-    
-public DASHBOARD(){
-initComponents();
-    loadTasks();
 }
    
 
@@ -365,116 +362,95 @@ initComponents();
     }// </editor-fold>//GEN-END:initComponents
 
     private void CreateTaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateTaskActionPerformed
-    try {
-            String task = TASK.getText().trim();
-            String deadline = DEADLINE.getText().trim();
-            String priority = PRIORITY.getSelectedItem().toString();
-            String animal = ANIMAL.getSelectedItem().toString();
+    
+        String task = TASK.getText().trim();
+        String deadline = DEADLINE.getText().trim();
+        String priority = PRIORITY.getSelectedItem().toString();
+        String animal = ANIMAL.getSelectedItem().toString();
 
-            if (task.isEmpty() || deadline.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please fill in all fields.");
-                return;
-            }
+        if (task.isEmpty() || deadline.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Fill all fields!");
+            return;
+        }
 
-            Connection conn = connectionDB_Eun.getConnection();
-String sql = "INSERT INTO my_task (taskName, taskDeadline, priority, taskAnimal, Status, userId) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO my_task (taskName, taskDeadline, priority, taskAnimal, Status, userId) " +
+                     "VALUES (?, ?, ?, ?, 'Pending', ?)";
 
-PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        try (Connection conn = connectionDB_Eun.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
 
-pst.setString(1, task);
-pst.setString(2, deadline);
-pst.setString(3, priority);
-pst.setString(4, animal);
-pst.setString(5, "Pending");
-pst.setInt(6, Session.userid); 
+            pst.setString(1, task);
+            pst.setString(2, deadline);
+            pst.setString(3, priority);
+            pst.setString(4, animal);
+            pst.setInt(5, Session.userid);
 
             pst.executeUpdate();
 
-     
-            ResultSet rs = pst.getGeneratedKeys();
-            int taskId = -1;
-            if (rs.next()) {
-                taskId = rs.getInt(1);
-            }
+            JOptionPane.showMessageDialog(this, "Task created!");
 
            
-            DefaultTableModel model = (DefaultTableModel) myTable.getModel();
-
-            model.addRow(new Object[]{
-                    taskId,
-                    task,
-                    deadline,
-                    priority,
-                    animal,
-                    "Pending"
-            });
-
-            JOptionPane.showMessageDialog(this, "Task added successfully!");
+            loadTasks(); 
 
             TASK.setText("");
             DEADLINE.setText("");
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_CreateTaskActionPerformed
 
     private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
-   try {
-    int row = myTable.getSelectedRow();
+  
+        int row = myTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Select a task first!");
+            return;
+        }
 
-    if (row == -1) {
-        JOptionPane.showMessageDialog(this, "Please select a row to delete.");
-        return;
-    }
+        int taskId = Integer.parseInt(myTable.getValueAt(row, 0).toString());
 
-    DefaultTableModel model = (DefaultTableModel) myTable.getModel();
-    int taskId = Integer.parseInt(model.getValueAt(row, 0).toString());
+        String sql = "DELETE FROM my_task WHERE TaskID = ? AND userId = ?";
 
-    int confirm = JOptionPane.showConfirmDialog(
-            this,
-            "Delete this task?",
-            "Confirm",
-            JOptionPane.YES_NO_OPTION
-    );
+        try (Connection conn = connectionDB_Eun.getConnection();
+             PreparedStatement pst = conn.prepareStatement(sql)) {
 
-    if (confirm != JOptionPane.YES_OPTION) return;
+            pst.setInt(1, taskId);
+            pst.setInt(2, Session.userid);
 
-    Connection conn = connectionDB_Eun.getConnection();
+            pst.executeUpdate();
 
-    String sql = "DELETE FROM my_task WHERE TaskID = ? AND userId = ?";
-    PreparedStatement pst = conn.prepareStatement(sql);
+            JOptionPane.showMessageDialog(this, "Deleted!");
 
-    pst.setInt(1, taskId);
-    pst.setInt(2, Session.userid);
+            loadTasks(); 
 
-    int rowsAffected = pst.executeUpdate();
-
-    if (rowsAffected > 0) {
-        model.removeRow(row);
-        JOptionPane.showMessageDialog(this, "Task deleted!");
-    } else {
-        JOptionPane.showMessageDialog(this, "Delete failed! Check user session.");
-    }
-
-} catch (Exception e) {
-    e.printStackTrace();
-    JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-}
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }//GEN-LAST:event_DeleteActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
        
-        int result = JOptionPane.showConfirmDialog(this, 
-                "Are you sure you want to log out?",
-                "Confirm Logout",
-                JOptionPane.YES_NO_OPTION
-        );
+         int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to log out?",
+            "Confirm Logout",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+    );
 
-        if (result == JOptionPane.YES_OPTION) {
-            dispose();
-            new loginfinal2().setVisible(true);
-        }
+    if (confirm == JOptionPane.YES_OPTION) {
+
+       
+        Session.userid = 0;
+        Session.username = null;
+
+      
+        dispose();
+
+      
+        new loginfinal2().setVisible(true);
+    }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void viewTaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewTaskActionPerformed
@@ -532,7 +508,7 @@ if (row == -1) {
 try {
     DefaultTableModel model = (DefaultTableModel) myTable.getModel();
 
-    // Get TaskID (MUST BE COLUMN 0)
+  
     int taskId = Integer.parseInt(model.getValueAt(row, 0).toString());
 
     Connection conn = connectionDB_Eun.getConnection();
@@ -545,8 +521,8 @@ try {
 
     pst.executeUpdate();
 
-    // Update JTable
-    model.setValueAt("Completed", row, 5); // Status column index
+   
+    model.setValueAt("Completed", row, 5); 
 
     JOptionPane.showMessageDialog(this, "Task marked as Completed!");
 
