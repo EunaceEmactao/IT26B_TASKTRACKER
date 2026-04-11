@@ -112,11 +112,7 @@ initComponents();
         myTable.setForeground(new java.awt.Color(0, 0, 0));
         myTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Task", "Deadline", "Priority", "Animal", "Status"
@@ -345,7 +341,8 @@ initComponents();
             task,
             deadline,
             priority,
-            animal
+            animal,
+            "Pending"
         });
 
         TASK.setText("");
@@ -429,7 +426,22 @@ initComponents();
     }//GEN-LAST:event_TASKActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+    
+
+    int row = myTable.getSelectedRow();
+
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a task first.");
+        return;
+    }
+
+    DefaultTableModel model = (DefaultTableModel) myTable.getModel();
+
+   
+    model.setValueAt("Completed", row, 4);
+
+    JOptionPane.showMessageDialog(this, "Task marked as Completed!");
+
     }//GEN-LAST:event_jButton7ActionPerformed
 
     public static void main(String args[]) {
