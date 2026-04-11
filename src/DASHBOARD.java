@@ -330,9 +330,10 @@ initComponents();
     }// </editor-fold>//GEN-END:initComponents
 
     private void CreateTaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateTaskActionPerformed
-        try {
+   try {
     String task = TASK.getText().trim();
     String deadline = DEADLINE.getText().trim();
+    String priority = PRIORITY.getSelectedItem().toString();
     String animal = ANIMAL.getSelectedItem().toString();
 
     if (task.isEmpty() || deadline.isEmpty()) {
@@ -342,14 +343,15 @@ initComponents();
 
     Connection conn = connectionDB_Eun.getConnection();
 
-    String sql = "INSERT INTO my_task (taskName, taskDeadline, taskAnimal, Status) VALUES (?, ?, ?, ?)";
+    String sql = "INSERT INTO my_task (taskName, taskDeadline, priority, taskAnimal, Status) VALUES (?, ?, ?, ?, ?)";
 
     PreparedStatement pst = conn.prepareStatement(sql);
 
     pst.setString(1, task);
     pst.setString(2, deadline);
-    pst.setString(3, animal);
-    pst.setString(4, "Pending"); // default status
+    pst.setString(3, priority);
+    pst.setString(4, animal);
+    pst.setString(5, "Pending");
 
     pst.executeUpdate();
 
@@ -358,6 +360,7 @@ initComponents();
     model.addRow(new Object[]{
         task,
         deadline,
+        priority,
         animal,
         "Pending"
     });
@@ -450,21 +453,38 @@ initComponents();
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
     
+int row = myTable.getSelectedRow();
 
-    int row = myTable.getSelectedRow();
+if (row == -1) {
+    JOptionPane.showMessageDialog(this, "Please select a task first.");
+    return;
+}
 
-    if (row == -1) {
-        JOptionPane.showMessageDialog(this, "Please select a task first.");
-        return;
-    }
-
+try {
     DefaultTableModel model = (DefaultTableModel) myTable.getModel();
 
-   
+    // Get TaskID from selected row (IMPORTANT)
+    int taskId = Integer.parseInt(model.getValueAt(row, 0).toString());
+
+    Connection conn = connectionDB_Eun.getConnection();
+
+    String sql = "UPDATE my_task SET Status = ? WHERE TaskID = ?";
+    PreparedStatement pst = conn.prepareStatement(sql);
+
+    pst.setString(1, "Completed");
+    pst.setInt(2, taskId);
+
+    pst.executeUpdate();
+
+    // Update JTable after DB update
     model.setValueAt("Completed", row, 4);
 
     JOptionPane.showMessageDialog(this, "Task marked as Completed!");
 
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+
+}
     }//GEN-LAST:event_jButton7ActionPerformed
 
     public static void main(String args[]) {
