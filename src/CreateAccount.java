@@ -3,7 +3,7 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
-
+import java.sql.ResultSet;
 
 public class CreateAccount extends javax.swing.JFrame {
 
@@ -199,34 +199,60 @@ public class CreateAccount extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginActionPerformed
-      DASHBOARD dash = new DASHBOARD();
+       try {
+            Connection conn = connectionDB_Eun.getConnection();
+
+            String user = username.getText().trim();
+            String pass = new String(password.getPassword()).trim();
+
+         
+            if (user.isEmpty() || pass.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please fill all fields!");
+                return;
+            }
+
+      
+            String checkSql = "SELECT * FROM account WHERE username = ?";
+            PreparedStatement checkPst = conn.prepareStatement(checkSql);
+            checkPst.setString(1, user);
+
+            ResultSet checkRs = checkPst.executeQuery();
+
+            if (checkRs.next()) {
+                JOptionPane.showMessageDialog(this, "Username already exists!");
+                return;
+            }
+
         
+            String sql = "INSERT INTO account (username, password) VALUES (?, ?)";
+            PreparedStatement pst = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+
+            pst.setString(1, user);
+            pst.setString(2, pass);
+
+            int rowsInserted = pst.executeUpdate();
+
+            if (rowsInserted > 0) {
+
+              
+                ResultSet rs = pst.getGeneratedKeys();
+                if (rs.next()) {
+                    Session.userId = rs.getInt(1);
+                }
+
+                JOptionPane.showMessageDialog(this, "Account Created Successfully!");
+
         
-        Connection conn = connectionDB_Eun.getConnection();
+                new DASHBOARD().setVisible(true);
+                dispose();
 
-try {
-    String sql = "INSERT INTO accounts (username, password) VALUES (?, ?)";
-    PreparedStatement pst = conn.prepareStatement(sql);
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to create account.");
+            }
 
-    String user = username.getText();
-    String pass = new String(password.getPassword());
-
-    pst.setString(1, user);
-    pst.setString(2, pass);
-
-    int rowsInserted = pst.executeUpdate();
-
-    if (rowsInserted > 0) {
-          dash.setVisible(true);
-             dispose();                                
-        JOptionPane.showMessageDialog(null, "Account Created Successfully!");
-    } else {
-        JOptionPane.showMessageDialog(null, "Failed to create account.");
-    }
-
-} catch (Exception e) {
-    JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
-}  
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
   
 
     }//GEN-LAST:event_LoginActionPerformed

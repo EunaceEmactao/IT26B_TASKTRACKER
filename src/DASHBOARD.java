@@ -420,7 +420,7 @@ pst.setInt(6, Session.userId);
     }//GEN-LAST:event_CreateTaskActionPerformed
 
     private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
-      try {
+   try {
     int row = myTable.getSelectedRow();
 
     if (row == -1) {
@@ -448,14 +448,17 @@ pst.setInt(6, Session.userId);
     pst.setInt(1, taskId);
     pst.setInt(2, Session.userId);
 
-    pst.executeUpdate();
+    int rowsAffected = pst.executeUpdate();
 
-    model.removeRow(row);
-
-    JOptionPane.showMessageDialog(this, "Task deleted!");
+    if (rowsAffected > 0) {
+        model.removeRow(row);
+        JOptionPane.showMessageDialog(this, "Task deleted!");
+    } else {
+        JOptionPane.showMessageDialog(this, "Delete failed! Check user session.");
+    }
 
 } catch (Exception e) {
-    e.printStackTrace(); // 🔥 IMPORTANT (shows real error in console)
+    e.printStackTrace();
     JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
 }
     }//GEN-LAST:event_DeleteActionPerformed
