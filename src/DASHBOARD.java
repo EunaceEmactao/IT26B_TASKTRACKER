@@ -10,8 +10,45 @@ import java.sql.Statement;
 
 
 public class DASHBOARD extends javax.swing.JFrame {
+    private void loadTasks() {
+    try {
+        Connection conn = connectionDB_Eun.getConnection();
+
+        String sql = "SELECT * FROM my_task WHERE userId = ?";
+        PreparedStatement pst = conn.prepareStatement(sql);
+        pst.setInt(1, Session.userId);
+
+        ResultSet rs = pst.executeQuery();
+
+        DefaultTableModel model = (DefaultTableModel) myTable.getModel();
+        model.setRowCount(0);
+
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getInt("TaskID"),
+                rs.getString("taskName"),
+                rs.getString("taskDeadline"),
+                rs.getString("priority"),
+                rs.getString("taskAnimal"),
+                rs.getString("Status")
+            });
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    }
+}
+    
+    
+    
+    
+    
+    
+    
+    
 public DASHBOARD(){
 initComponents();
+
 }
    
 
@@ -340,27 +377,27 @@ initComponents();
             }
 
             Connection conn = connectionDB_Eun.getConnection();
+String sql = "INSERT INTO my_task (taskName, taskDeadline, priority, taskAnimal, Status, userId) VALUES (?, ?, ?, ?, ?, ?)";
 
-            String sql = "INSERT INTO my_task (taskName, taskDeadline, priority, taskAnimal, Status) VALUES (?, ?, ?, ?, ?)";
+PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-            pst.setString(1, task);
-            pst.setString(2, deadline);
-            pst.setString(3, priority);
-            pst.setString(4, animal);
-            pst.setString(5, "Pending");
+pst.setString(1, task);
+pst.setString(2, deadline);
+pst.setString(3, priority);
+pst.setString(4, animal);
+pst.setString(5, "Pending");
+pst.setInt(6, Session.userId); 
 
             pst.executeUpdate();
 
-            // GET GENERATED TASK ID
+     
             ResultSet rs = pst.getGeneratedKeys();
             int taskId = -1;
             if (rs.next()) {
                 taskId = rs.getInt(1);
             }
 
-            // ADD TO TABLE (MATCH COLUMN ORDER!)
+           
             DefaultTableModel model = (DefaultTableModel) myTable.getModel();
 
             model.addRow(new Object[]{
