@@ -3,6 +3,11 @@
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+
+
 
 public class DASHBOARD extends javax.swing.JFrame {
 public DASHBOARD(){
@@ -325,28 +330,46 @@ initComponents();
     }// </editor-fold>//GEN-END:initComponents
 
     private void CreateTaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateTaskActionPerformed
-        String task = TASK.getText().trim();
-        String deadline = DEADLINE.getText().trim();
-        String priority = PRIORITY.getSelectedItem().toString();
-        String animal = ANIMAL.getSelectedItem().toString();
+        try {
+    String task = TASK.getText().trim();
+    String deadline = DEADLINE.getText().trim();
+    String animal = ANIMAL.getSelectedItem().toString();
 
-        if (task.isEmpty() || deadline.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
-            return;
+    if (task.isEmpty() || deadline.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+        return;
+    }
 
-        }
+    Connection conn = connectionDB_Eun.getConnection();
 
-        DefaultTableModel model = (DefaultTableModel) myTable.getModel();
-        model.addRow(new Object[]{
-            task,
-            deadline,
-            priority,
-            animal,
-            "Pending"
-        });
+    String sql = "INSERT INTO my_task (taskName, taskDeadline, taskAnimal, Status) VALUES (?, ?, ?, ?)";
 
-        TASK.setText("");
-        DEADLINE.setText("");
+    PreparedStatement pst = conn.prepareStatement(sql);
+
+    pst.setString(1, task);
+    pst.setString(2, deadline);
+    pst.setString(3, animal);
+    pst.setString(4, "Pending"); // default status
+
+    pst.executeUpdate();
+
+    // Add to JTable
+    DefaultTableModel model = (DefaultTableModel) myTable.getModel();
+    model.addRow(new Object[]{
+        task,
+        deadline,
+        animal,
+        "Pending"
+    });
+
+    JOptionPane.showMessageDialog(this, "Task added successfully!");
+
+    TASK.setText("");
+    DEADLINE.setText("");
+
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+}
     }//GEN-LAST:event_CreateTaskActionPerformed
 
     private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
