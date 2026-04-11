@@ -443,23 +443,24 @@ initComponents();
         if (row != -1) {
             DefaultTableModel model = (DefaultTableModel) myTable.getModel();
 
-            String task = model.getValueAt(row, 0).toString();
-            String deadline = model.getValueAt(row, 1).toString();
-            String priority = model.getValueAt(row, 2).toString();
-            String animal = model.getValueAt(row, 3).toString();
-
+            String task = model.getValueAt(row, 1).toString();
+            String deadline = model.getValueAt(row, 2).toString();
+            String priority = model.getValueAt(row, 3).toString();
+            String animal = model.getValueAt(row, 4).toString();
+            String Status = model.getValueAt(row, 5).toString();
             ImageIcon icon = new ImageIcon("C:\\Users\\Eunace Faith Emactao\\Downloads\\writing (1) (1).png");
 
             JOptionPane.showMessageDialog(this,
                     "Task: " + task
                     + "\nDeadline: " + deadline
                     + "\nPriority: " + priority
-                    + "\nAnimal: " + animal,
+                    + "\nAnimal: " + animal
+                    +"\nStatus:" + Status,
                     "Task Details",
                     JOptionPane.INFORMATION_MESSAGE,
                     icon
             );
-        }
+        }        
     }//GEN-LAST:event_viewTaskActionPerformed
 
     private void DEADLINEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DEADLINEActionPerformed
