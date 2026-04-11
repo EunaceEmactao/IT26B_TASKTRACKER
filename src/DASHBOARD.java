@@ -5,8 +5,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-
-
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 
 public class DASHBOARD extends javax.swing.JFrame {
@@ -120,14 +120,14 @@ initComponents();
 
             },
             new String [] {
-                "Task", "Deadline", "Priority", "Animal", "Status"
+                "TaskID", "Task", "Deadline", "Priority", "Animal", "Status"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -330,68 +330,96 @@ initComponents();
     }// </editor-fold>//GEN-END:initComponents
 
     private void CreateTaskActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateTaskActionPerformed
-   try {
-    String task = TASK.getText().trim();
-    String deadline = DEADLINE.getText().trim();
-    String priority = PRIORITY.getSelectedItem().toString();
-    String animal = ANIMAL.getSelectedItem().toString();
+    try {
+            String task = TASK.getText().trim();
+            String deadline = DEADLINE.getText().trim();
+            String priority = PRIORITY.getSelectedItem().toString();
+            String animal = ANIMAL.getSelectedItem().toString();
 
-    if (task.isEmpty() || deadline.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Please fill in all fields.");
-        return;
-    }
+            if (task.isEmpty() || deadline.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+                return;
+            }
 
-    Connection conn = connectionDB_Eun.getConnection();
+            Connection conn = connectionDB_Eun.getConnection();
 
-    String sql = "INSERT INTO my_task (taskName, taskDeadline, priority, taskAnimal, Status) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO my_task (taskName, taskDeadline, priority, taskAnimal, Status) VALUES (?, ?, ?, ?, ?)";
 
-    PreparedStatement pst = conn.prepareStatement(sql);
+            PreparedStatement pst = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-    pst.setString(1, task);
-    pst.setString(2, deadline);
-    pst.setString(3, priority);
-    pst.setString(4, animal);
-    pst.setString(5, "Pending");
+            pst.setString(1, task);
+            pst.setString(2, deadline);
+            pst.setString(3, priority);
+            pst.setString(4, animal);
+            pst.setString(5, "Pending");
 
-    pst.executeUpdate();
+            pst.executeUpdate();
 
-    // Add to JTable
-    DefaultTableModel model = (DefaultTableModel) myTable.getModel();
-    model.addRow(new Object[]{
-        task,
-        deadline,
-        priority,
-        animal,
-        "Pending"
-    });
+            // GET GENERATED TASK ID
+            ResultSet rs = pst.getGeneratedKeys();
+            int taskId = -1;
+            if (rs.next()) {
+                taskId = rs.getInt(1);
+            }
 
-    JOptionPane.showMessageDialog(this, "Task added successfully!");
+            // ADD TO TABLE (MATCH COLUMN ORDER!)
+            DefaultTableModel model = (DefaultTableModel) myTable.getModel();
 
-    TASK.setText("");
-    DEADLINE.setText("");
+            model.addRow(new Object[]{
+                    taskId,
+                    task,
+                    deadline,
+                    priority,
+                    animal,
+                    "Pending"
+            });
 
-} catch (Exception e) {
-    JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-}
+            JOptionPane.showMessageDialog(this, "Task added successfully!");
+
+            TASK.setText("");
+            DEADLINE.setText("");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
     }//GEN-LAST:event_CreateTaskActionPerformed
 
     private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
-        DefaultTableModel model = (DefaultTableModel) myTable.getModel();
-        int selectedRow = myTable.getSelectedRow();
+         int row = myTable.getSelectedRow();
 
-        if (selectedRow != -1) {
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a row to delete.");
+            return;
+        }
+
+        try {
+            DefaultTableModel model = (DefaultTableModel) myTable.getModel();
+
+            int taskId = Integer.parseInt(model.getValueAt(row, 0).toString());
+
             int confirm = JOptionPane.showConfirmDialog(
                     this,
-                    "Are you sure you want to delete this row?",
-                    "Confirm Delete",
+                    "Delete this task?",
+                    "Confirm",
                     JOptionPane.YES_NO_OPTION
             );
 
-            if (confirm == JOptionPane.YES_OPTION) {
-                model.removeRow(selectedRow);
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Please select a row to delete.");
+            if (confirm != JOptionPane.YES_OPTION) return;
+
+            Connection conn = connectionDB_Eun.getConnection();
+
+            String sql = "DELETE FROM my_task WHERE TaskID = ?";
+            PreparedStatement pst = conn.prepareStatement(sql);
+
+            pst.setInt(1, taskId);
+            pst.executeUpdate();
+
+            model.removeRow(row);
+
+            JOptionPane.showMessageDialog(this, "Task deleted!");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
     }//GEN-LAST:event_DeleteActionPerformed
 
@@ -463,7 +491,7 @@ if (row == -1) {
 try {
     DefaultTableModel model = (DefaultTableModel) myTable.getModel();
 
-    // Get TaskID from selected row (IMPORTANT)
+    // Get TaskID (MUST BE COLUMN 0)
     int taskId = Integer.parseInt(model.getValueAt(row, 0).toString());
 
     Connection conn = connectionDB_Eun.getConnection();
@@ -476,14 +504,13 @@ try {
 
     pst.executeUpdate();
 
-    // Update JTable after DB update
-    model.setValueAt("Completed", row, 4);
+    // Update JTable
+    model.setValueAt("Completed", row, 5); // Status column index
 
     JOptionPane.showMessageDialog(this, "Task marked as Completed!");
 
 } catch (Exception e) {
     JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-
 }
     }//GEN-LAST:event_jButton7ActionPerformed
 
