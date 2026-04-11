@@ -48,7 +48,7 @@ public class DASHBOARD extends javax.swing.JFrame {
     
 public DASHBOARD(){
 initComponents();
-
+    loadTasks();
 }
    
 
@@ -420,42 +420,44 @@ pst.setInt(6, Session.userId);
     }//GEN-LAST:event_CreateTaskActionPerformed
 
     private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
-         int row = myTable.getSelectedRow();
+      try {
+    int row = myTable.getSelectedRow();
 
-        if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a row to delete.");
-            return;
-        }
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a row to delete.");
+        return;
+    }
 
-        try {
-            DefaultTableModel model = (DefaultTableModel) myTable.getModel();
+    DefaultTableModel model = (DefaultTableModel) myTable.getModel();
+    int taskId = Integer.parseInt(model.getValueAt(row, 0).toString());
 
-            int taskId = Integer.parseInt(model.getValueAt(row, 0).toString());
+    int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Delete this task?",
+            "Confirm",
+            JOptionPane.YES_NO_OPTION
+    );
 
-            int confirm = JOptionPane.showConfirmDialog(
-                    this,
-                    "Delete this task?",
-                    "Confirm",
-                    JOptionPane.YES_NO_OPTION
-            );
+    if (confirm != JOptionPane.YES_OPTION) return;
 
-            if (confirm != JOptionPane.YES_OPTION) return;
+    Connection conn = connectionDB_Eun.getConnection();
 
-            Connection conn = connectionDB_Eun.getConnection();
+    String sql = "DELETE FROM my_task WHERE TaskID = ? AND userId = ?";
+    PreparedStatement pst = conn.prepareStatement(sql);
 
-            String sql = "DELETE FROM my_task WHERE TaskID = ?";
-            PreparedStatement pst = conn.prepareStatement(sql);
+    pst.setInt(1, taskId);
+    pst.setInt(2, Session.userId);
 
-            pst.setInt(1, taskId);
-            pst.executeUpdate();
+    pst.executeUpdate();
 
-            model.removeRow(row);
+    model.removeRow(row);
 
-            JOptionPane.showMessageDialog(this, "Task deleted!");
+    JOptionPane.showMessageDialog(this, "Task deleted!");
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-        }
+} catch (Exception e) {
+    e.printStackTrace(); // 🔥 IMPORTANT (shows real error in console)
+    JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+}
     }//GEN-LAST:event_DeleteActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
