@@ -16,7 +16,7 @@ public class DASHBOARD extends javax.swing.JFrame {
 
         String sql = "SELECT * FROM my_task WHERE userId = ?";
         PreparedStatement pst = conn.prepareStatement(sql);
-        pst.setInt(1, Session.userId);
+        pst.setInt(1, Session.userid);
 
         ResultSet rs = pst.executeQuery();
 
@@ -386,7 +386,7 @@ pst.setString(2, deadline);
 pst.setString(3, priority);
 pst.setString(4, animal);
 pst.setString(5, "Pending");
-pst.setInt(6, Session.userId); 
+pst.setInt(6, Session.userid); 
 
             pst.executeUpdate();
 
@@ -446,7 +446,7 @@ pst.setInt(6, Session.userId);
     PreparedStatement pst = conn.prepareStatement(sql);
 
     pst.setInt(1, taskId);
-    pst.setInt(2, Session.userId);
+    pst.setInt(2, Session.userid);
 
     int rowsAffected = pst.executeUpdate();
 

@@ -16,6 +16,7 @@ public class loginfinal2 extends javax.swing.JFrame {
 
     public loginfinal2() {
         initComponents();
+     
     }
 
     /**
@@ -205,36 +206,55 @@ public class loginfinal2 extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-      
+      CreateAccount login = new CreateAccount();
+       login.setVisible(true);
+       dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
- DASHBOARD dash = new DASHBOARD();
-   
 
 
-Connection conn = connectionDB_Eun.getConnection();
+    String user = username.getText().trim();
+    String pass = new String(password.getPassword()).trim();
 
-try {
-    String sql = "SELECT * FROM account WHERE username=? AND password=?";
-    PreparedStatement pst = conn.prepareStatement(sql);
+    if (user.isEmpty() || pass.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter username and password.");
+        return;
+    }
 
-    String user = username.getText();
-    String pass = new String(password.getPassword());
+    try {
+        Connection conn = connectionDB_Eun.getConnection();
 
-    pst.setString(1, user);
-    pst.setString(2, pass);
+        String sql = "SELECT userID FROM account WHERE username=? AND password=?";
+        PreparedStatement pst = conn.prepareStatement(sql);
 
-    ResultSet rs = pst.executeQuery();
-          if (rs.next()) {
-              dash.setVisible(true);
-              dispose();
-} else {
-    JOptionPane.showMessageDialog(null, "Incorrect Credentials");
-}
-} catch (Exception e) {
-    JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
-}
+        pst.setString(1, user);
+        pst.setString(2, pass);
+
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {    
+
+            
+            Session.userid = rs.getInt("userID");
+
+            JOptionPane.showMessageDialog(this, "Login successful!");
+
+            new DASHBOARD().setVisible(true);
+            this.dispose();
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Incorrect username or password.");
+        }
+
+        rs.close();
+        pst.close();
+        conn.close();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    }
+
 
 
 

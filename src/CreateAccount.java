@@ -237,7 +237,7 @@ public class CreateAccount extends javax.swing.JFrame {
               
                 ResultSet rs = pst.getGeneratedKeys();
                 if (rs.next()) {
-                    Session.userId = rs.getInt(1);
+                    Session.userid = rs.getInt("userID");
                 }
 
                 JOptionPane.showMessageDialog(this, "Account Created Successfully!");
