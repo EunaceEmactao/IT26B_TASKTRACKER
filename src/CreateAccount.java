@@ -218,7 +218,7 @@ try {
 
     if (rowsInserted > 0) {
           dash.setVisible(true);
-             dispose();
+             dispose();                                
         JOptionPane.showMessageDialog(null, "Account Created Successfully!");
     } else {
         JOptionPane.showMessageDialog(null, "Failed to create account.");
