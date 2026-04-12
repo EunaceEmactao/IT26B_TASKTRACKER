@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
-import java.sql.Statement;
+
 public class CreateAccount extends javax.swing.JFrame {
 
 
